@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz Page</title>
+  <style>
+
+.header {
+  background-color: #1a1a1a; /* or rgba(255,255,255,0.1) with blur */
+  color: white;
+  padding: 20px;
+  font-size: 22px;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 12px;
+  margin: 20px auto;
+  width: fit-content;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+    @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+    }
+    .header {
+      background-color: #1a1a1a;
+      color: white;
+      padding: 10px 20px;
+    }
+    .header h2 { margin: 0; }
+    .main {
+      display: flex;
+      margin-top: 30px;
+    }
+    .content {
+      flex: 3;
+      padding: 20px;
+    }
+    .sidebar {
+      flex: 1;
+      background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+      padding: 25px;
+      border-left: 2px solid #dee2e6;
+      min-width: 280px;
+    }
+    .summary-header {
+      border-bottom: 2px solid #eee;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+    .summary-header h3 {
+      margin: 0;
+      color: #333;
+      font-size: 18px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 24px;
+      font-weight: 600;
+      color: #4CAF50;
+      margin: 5px 0;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .progress-section {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .progress-label span {
+      font-size: 14px;
+      color: #666;
+    }
+    .progress-label .percentage {
+      font-weight: 600;
+      color: #4CAF50;
+    }
+    .question-box {
+      background-color: #ffffff;
+      border-left: 5px solid #7e57c2;
+      padding: 25px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      animation: slideIn 0.3s ease-out;
+      transform-origin: center;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .summary-buttons button.active {
+      animation: pulse 0.5s ease-in-out;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .options {
+      margin-top: 20px;
+    }
+    .options label {
+      display: block;
+      background-color: #fff;
+      border: 2px solid #e0e0e0;
+      margin: 8px 0;
+      padding: 15px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      position: relative;
+      padding-left: 60px;
+    }
+
+    .options label::before {
+      content: attr(data-option);
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+      background: #f5f5f5;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: #333;
+      transition: all 0.3s ease;
+    }
+
+    .options label:hover::before {
+      background: #7e57c2;
+      color: white;
+    }
+
+    .options label.selected::before {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .options input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .main {
+        flex-direction: column;
+      }
+      .sidebar {
+        border-left: none;
+        border-top: 2px solid #ccc;
+        margin-top: 20px;
+      }
+      .options label {
+        padding: 12px;
+        padding-left: 40px;
+      }
+      .options input[type="radio"] {
+        left: 15px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+    .navigation-buttons, .footer-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    .navigation-buttons button, .footer-buttons button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 50px;
+    }
+    .flag-btn { background-color: #7e57c2; color: white; }
+    .save-btn { background-color: #03a9f4; color: white; }
+    .nav-btn { background-color: #fbc02d; }
+    .finish-btn { background-color: #e91e63; color: white; }
+    .summary-buttons {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
+      margin-bottom: 20px;
+    }
+
+    .summary-buttons button {
+      width: 35px;
+      height: 35px;
+      border: none;
+      border-radius: 4px;
+      background-color: #f0f0f0;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 14px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .summary-buttons button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: transparent;
+      transition: all 0.3s ease;
+    }
+
+    .summary-buttons button.answered::before {
+      background: #4CAF50;
+    }
+
+    .summary-buttons button.flagged::before {
+      background: #e91e63;
+    }
+
+    .summary-buttons button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .summary-buttons button.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: #333;
+      animation: underline 0.3s ease forwards;
+    }
+
+    @keyframes underline {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    .summary-buttons button:hover::before {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 5px 10px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      font-size: 12px;
+      border-radius: 4px;
+      white-space: nowrap;
+      z-index: 1000;
+    }
+
+    .summary-buttons button::after {
+      content: attr(data-answer);
+      position: absolute;
+      bottom: -3px;
+      right: -3px;
+      font-size: 10px;
+      background: #4CAF50;
+      color: white;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .summary-buttons button.answered::after {
+      opacity: 1;
+    }
+
+    .summary-buttons button.active {
+      background-color: #7e57c2;
+      color: white;
+    }
+
+    .summary-buttons button.flagged {
+      border: 2px solid #e91e63;
+    }
+
+    .summary-stat {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .summary-stat:last-child {
+      border-bottom: none;
+    }
+    
+    .summary-buttons button.active { outline: 2px solid #000; }
+    .summary-buttons button.answered { background-color: green; color: white; }
+    .summary-buttons button.flagged { border: 2px solid red; }
+    .login-info {
+      text-align: right;
+      font-size: 14px;
+    }
+    .timer-circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #222;
+      color: white;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      font-weight: bold;
+      border: 5px solid #fbc02d;
+      z-index: 999;
+      transition: border-color 0.3s;
+    }
+
+    .timer-circle.warning {
+      border-color: #ff9800;
+      animation: timerPulse 1s infinite;
+    }
+
+    .timer-circle.critical {
+      border-color: #f44336;
+      animation: timerPulse 0.5s infinite;
+    }
+
+    @keyframes timerPulse {
+      0% { transform: translateX(-50%) scale(1); }
+      50% { transform: translateX(-50%) scale(1.05); }
+      100% { transform: translateX(-50%) scale(1); }
+    }
+
+    .progress-container {
+      width: 100%;
+      background-color: #f0f0f0;
+      height: 8px;
+      border-radius: 4px;
+      margin: 10px 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #4CAF50, #45a049);
+      width: 0%;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .summary-stats {
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .summary-stat {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 8px 0;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .summary-stat .label {
+      font-weight: 500;
+    }
+
+    .summary-stat .value {
+      font-weight: 600;
+      color: #4CAF50;
+    }
+
+    .progress-text {
+      font-size: 14px;
+      color: #666;
+      text-align: center;
+      margin: 5px 0;
+    }
+
+    .progress-text.complete {
+      color: #4CAF50;
+      font-weight: 600;
+    }
+
+    /* .quiz-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    } */
+
+    .progress-section {
+      margin: 40px auto;
+      max-width: 800px;
+      text-align: center;
+    }
+
+    .timer-circle {
+      margin: 20px auto;
+    }
+
+    .timer-container {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      text-align: center;
+    }
+
+    .timer-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      color: white;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      position: relative;
+      margin: 0 auto;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+
+    .timer-circle.warning {
+      background: linear-gradient(135deg, #ff9800, #f57c00);
+      animation: pulse 1s infinite;
+    }
+
+    .timer-circle.critical {
+      background: linear-gradient(135deg, #f44336, #d32f2f);
+      animation: pulse 0.5s infinite;
+    }
+
+    .timer-circle::before {
+      content: '';
+      position: absolute;
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      top: -6px;
+      left: -6px;
+      opacity: 0.3;
+    }
+
+    .timer-label {
+      font-size: 12px;
+      color: #666;
+      margin-top: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .review-popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 1100;
+      overflow-y: auto;
+      padding: 20px;
+      backdrop-filter: blur(5px);
+    }
+
+    .review-content {
+      background: linear-gradient(145deg, #ffffff, #f5f5f5);
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transform: translateY(20px);
+      opacity: 0;
+      animation: slideUp 0.5s ease forwards;
+    }
+
+    @keyframes slideUp {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .review-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #eee;
+    }
+
+    .review-header h2 {
+      color: #333;
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .review-stats {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .stat-box {
+      text-align: center;
+      padding: 15px 25px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    .stat-box .number {
+      font-size: 24px;
+      font-weight: 600;
+      color: #4CAF50;
+      margin-bottom: 5px;
+    }
+
+    .stat-box .label {
+      font-size: 14px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .review-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .review-item {
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .review-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .review-item.answered {
+      border-color: #4CAF50;
+      background: #f1f8e9;
+    }
+
+    .review-item.unanswered {
+      border-color: #f44336;
+      background: #ffebee;
+    }
+
+    .review-item.flagged::after {
+      content: '🚩';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .review-actions {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .review-actions button {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .review-actions .cancel {
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    .review-actions .submit {
+      background: linear-gradient(45deg, #4CAF50, #45a049);
+      color: white;
+      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    }
+
+    .review-actions button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    // Update button styles for keyboard focus
+    .summary-buttons button:focus {
+      outline: 3px solid #7e57c2;
+      outline-offset: 2px;
+    }
+
+    .options label:focus-within {
+      outline: 3px solid #7e57c2;
+      outline-offset: 2px;
+      background-color: #f3e5f5;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="quiz-container">
+    <!-- Add audio elements -->
+    <audio id="clickSound" src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//tUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADmADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzM//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjU0AAAAAAAAAAAAAAAAAAAAAAAAJAYAAAAAAAAAeZh0jJkFAAAAAAAAAAAAAAAAAAAA" preload="auto"></audio>
+    <audio id="successSound" src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//tUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADmADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzM//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjU0AAAAAAAAAAAAAAAAJAQAAAAAAAAAeZiEqUkFAAAAAAAAAAAAAAAAAAAA" preload="auto"></audio>
+    <audio id="warningSound" src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//tUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADmADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzM//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjU0AAAAAAAAAAAAAAAAJAUAAAAAAAAAeZh9oQsFAAAAAAAAAAAAAAAAAAAA" preload="auto"></audio>
+
+    <div class="header">
+      <h2>Welcome, <span id="username">Student</span>!</h2>
+    </div>
+
+    <div class="main">
+      <div class="content">
+        <div id="questions-container"></div>
+
+        <div class="footer-buttons">
+          <button class="finish-btn">Finish Quiz</button>
+          <button class="flag-btn">🚩 Flag Question</button>
+          <button class="save-btn">💾 Save Answer</button>
+        </div>
+
+        <div class="navigation-buttons">
+          <button class="nav-btn">« First</button>
+          <button class="nav-btn">‹ Previous</button>
+          <button class="nav-btn">Next ›</button>
+          <button class="nav-btn">Last »</button>
+        </div>
+      </div>
+
+      <div class="sidebar">
+        <h3>Summary</h3>
+        <div class="summary-buttons" id="summary-buttons"></div>
+        <div class="summary-stats">
+          <div class="summary-stat">
+            <span class="label"><strong>Attempted:</strong></span>
+            <span class="value" id="attempted-count">0</span>
+          </div>
+          <div class="summary-stat">
+            <span class="label"><strong>Flagged:</strong></span>
+            <span class="value" id="flagged-count">0</span>
+          </div>
+          <div class="summary-stat">
+            <span class="label"><strong>Total:</strong></span>
+            <span class="value" id="total-questions">0</span>
+          </div>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="progress-text" id="progress-text">Progress: 0%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="timer-container">
+    <div id="timer" class="timer-circle">30:00</div>
+    <div class="timer-label">Time Remaining</div>
+  </div>
+
+  <script>
+    const allQuestions = [
+      { 
+        question: "Which of the following is NOT an advantage of computers?",
+        options: ["Efficiency", "Reliability", "Safety", "Fast results"],
+        correctAnswer: "Safety"
+      },
+      { 
+        question: "Which part of the computer performs calculations?",
+        options: ["Monitor", "CPU", "Mouse", "Keyboard"],
+        correctAnswer: "CPU"
+      },
+      { 
+        question: "What is the full form of CPU?",
+        options: ["Central Processing Unit", "Control Processing Unit", "Central Print Unit", "Computer Processing Unit"],
+        correctAnswer: "Central Processing Unit"
+      },
+      { 
+        question: "Which storage device is NOT volatile?",
+        options: ["RAM", "Cache", "Hard Drive", "Registers"],
+        correctAnswer: "Hard Drive"
+      },
+      { 
+        question: "What type of software is Windows 10?",
+        options: ["Application Software", "System Software", "Utility Software", "Programming Software"],
+        correctAnswer: "System Software"
+      },
+      { 
+        question: "Which of the following is an output device?",
+        options: ["Mouse", "Keyboard", "Printer", "Scanner"],
+        correctAnswer: "Printer"
+      },
+      { 
+        question: "Which key is used to refresh a webpage?",
+        options: ["F2", "F5", "F12", "Esc"],
+        correctAnswer: "F5"
+      },
+      { 
+        question: "Which is used to connect to the internet?",
+        options: ["Router", "Monitor", "Keyboard", "CPU"],
+        correctAnswer: "Router"
+      },
+      { 
+        question: "Which of these is not an input device?",
+        options: ["Touchpad", "Microphone", "Monitor", "Scanner"],
+        correctAnswer: "Monitor"
+      },
+      { 
+        question: "Which file extension indicates an executable file?",
+        options: [".exe", ".docx", ".jpg", ".pdf"],
+        correctAnswer: ".exe"
+      },
+      { 
+        question: "What does CSS stand for?",
+        options: ["Cascading Style Sheets", "Creative Style Sheets", "Computer Style Sheets", "Colorful Style Sheets"],
+        correctAnswer: "Cascading Style Sheets"
+      },
+      { 
+        question: "What property is used to change the background color of an element in CSS?",
+        options: ["background-color", "color", "bgcolor", "background"],
+        correctAnswer: "background-color"
+      },
+      { 
+        question: "Which CSS property controls the text color?",
+        options: ["font-color", "text-color", "color", "foreground-color"],
+        correctAnswer: "color"
+      },
+      { 
+        question: "What is the default value of the `position` property in CSS?",
+        options: ["absolute", "fixed", "relative", "static"],
+        correctAnswer: "static"
+      },
+      { 
+        question: "How can you apply CSS styles to a specific class?",
+        options: ["#classname {}", ".classname {}", "classname {}", "class:classname {}"],
+        correctAnswer: ".classname {}"
+      },
+      { 
+        question: "Which of the following is used to link an external CSS file to an HTML document?",
+        options: ["<link href='style.css' />", "<stylesheet src='style.css' />", "<style src='style.css' />", "<link rel='stylesheet' href='style.css' />"],
+        correctAnswer: "<link rel='stylesheet' href='style.css' />"
+      },
+      { 
+        question: "What does the `z-index` property control in CSS?",
+        options: ["The font size", "The stacking order of elements", "The padding of an element", "The border width"],
+        correctAnswer: "The stacking order of elements"
+      },
+      { 
+        question: "What is the default value of the `display` property for a <div> element?",
+        options: ["block", "inline", "flex", "grid"],
+        correctAnswer: "block"
+      },
+      { 
+        question: "What is the purpose of the `box-sizing` property?",
+        options: ["To determine the content size of an element", "To add padding inside the element's border", "To change the layout mode of an element", "To include padding and borders in the element’s total width and height"],
+        correctAnswer: "To include padding and borders in the element’s total width and height"
+      },
+      { 
+        question: "Which CSS property controls the spacing between lines of text?",
+        options: ["line-height", "word-spacing", "letter-spacing", "text-spacing"],
+        correctAnswer: "line-height"
+      },
+      { 
+        question: "How do you change the font of an element in CSS?",
+        options: ["font-family", "font-style", "text-font", "style-font"],
+        correctAnswer: "font-family"
+      },
+      { 
+        question: "Which CSS property is used to control the space between elements?",
+        options: ["padding", "margin", "spacing", "border"],
+        correctAnswer: "margin"
+      },
+      { 
+        question: "How do you center a block element horizontally in CSS?",
+        options: ["margin: 0 auto;", "text-align: center;", "padding: 0 auto;", "align-items: center;"],
+        correctAnswer: "margin: 0 auto;"
+      },
+      { 
+        question: "How do you select all <p> elements with a class of 'intro'?",
+        options: ["p.intro {}", "p#intro {}", ".intro p {}", ".p.intro {}"],
+        correctAnswer: "p.intro {}"
+      },
+      { 
+        question: "What does the `float` property do in CSS?",
+        options: ["Moves an element from its normal flow, to the left or right", "Adds a shadow around an element", "Changes the display behavior of an element", "Allows an element to be resized"],
+        correctAnswer: "Moves an element from its normal flow, to the left or right"
+      },
+      { 
+        question: "What is the purpose of the `overflow` property in CSS?",
+        options: ["To change the element's color when it overflows", "To hide extra content outside an element's box", "To increase the size of an element when its content overflows", "To allow text to overflow outside its container"],
+        correctAnswer: "To hide extra content outside an element's box"
+      },
+      { 
+        question: "Which of these properties can you use to create a CSS grid layout?",
+        options: ["display: grid;", "display: inline-block;", "display: flex;", "display: table;"],
+        correctAnswer: "display: grid;"
+      },
+      { 
+        question: "How do you add a shadow effect to a text in CSS?",
+        options: ["text-shadow", "box-shadow", "shadow-effect", "text-glow"],
+        correctAnswer: "text-shadow"
+      },
+      { 
+        question: "How do you create a responsive design in CSS?",
+        options: ["Using @media queries", "Using flexbox only", "By defining fixed widths for elements", "Using a fixed viewport size"],
+        correctAnswer: "Using @media queries"
+      },
+      { 
+        question: "Which value of the `position` property makes an element stay in the same position even when the page is scrolled?",
+        options: ["static", "absolute", "relative", "fixed"],
+        correctAnswer: "fixed"
+      },
+      { 
+        question: "How do you create a flex container in CSS?",
+        options: ["display: flex;", "flex-container: true;", "display: grid;", "flex: 1;"],
+        correctAnswer: "display: flex;"
+      },
+      { 
+        question: "What does the `text-transform` property do in CSS?",
+        options: ["Transforms the case of text", "Transforms the layout of text", "Changes the color of text", "Changes the font size of text"],
+        correctAnswer: "Transforms the case of text"
+      },
+      { 
+        question: "Which CSS property controls the visibility of an element?",
+        options: ["opacity", "visibility", "display", "hidden"],
+        correctAnswer: "visibility"
+      },
+      { 
+        question: "How do you make an element visible after using the display: none; style?",
+        options: ["Use display: block;", "Use visibility: visible;", "Use visibility: hidden;", "Use opacity: 1;"],
+        correctAnswer: "Use display: block;"
+      },
+      { 
+        question: "Which CSS property is used to set the width of an element's border?",
+        options: ["border-width", "border-style", "border-color", "width"],
+        correctAnswer: "border-width"
+      },
+      { 
+        question: "Which of these CSS properties is used to make an element's text bold?",
+        options: ["font-weight: bold;", "font-style: bold;", "text-weight: bold;", "text-style: bold;"],
+        correctAnswer: "font-weight: bold;"
+      },
+      { 
+        question: "How do you add a comment in CSS?",
+        options: ["// This is a comment", "/* This is a comment */", "<!-- This is a comment -->", "' This is a comment"],
+        correctAnswer: "/* This is a comment */"
+      },
+      { 
+        question: "Which property is used to control the alignment of items inside a flex container?",
+        options: ["justify-content", "align-items", "align-content", "all of the above"],
+        correctAnswer: "all of the above"
+      },
+      { 
+        question: "What does the rem unit stand for in CSS?",
+        options: ["Relative to the parent element’s font-size", "Relative to the root element’s font-size", "Relative to the screen resolution", "Relative to the viewport height"],
+        correctAnswer: "Relative to the root element’s font-size"
+      },
+      { 
+        question: "What does the `border-radius` property do in CSS?",
+        options: ["Rounds the corners of an element", "Changes the width of the border", "Defines the radius of the border", "Adds a shadow to the border"],
+        correctAnswer: "Rounds the corners of an element"
+      },
+      { 
+        question: "How do you apply multiple styles to the same element in CSS?",
+        options: ["By separating the styles with a comma", "By adding a semicolon after each style", "By using multiple CSS rules with the same selector", "By defining a style class"],
+        correctAnswer: "By using multiple CSS rules with the same selector"
+      },
+      { 
+        question: "How do you specify a fixed width for an element in CSS?",
+        options: ["width: 100px;", "width: auto;", "width: 100%;", "width: max-content;"],
+        correctAnswer: "width: 100px;"
+      },
+      { 
+        question: "How can you add space between the content and the border of an element in CSS?",
+        options: ["padding", "margin", "border-spacing", "space"],
+        correctAnswer: "padding"
+      },
+      { 
+        question: "What does the `align-self` property do in CSS Flexbox?",
+        options: ["Aligns an item in a flex container along the cross axis", "Aligns all items in a flex container along the main axis", "Aligns a flex container itself along the cross axis", "Changes the size of a flex item"],
+        correctAnswer: "Aligns an item in a flex container along the cross axis"
+      },
+      { 
+        question: "Which CSS property is used to set the font size of text?",
+        options: ["font-size", "text-size", "size", "font"],
+        correctAnswer: "font-size"
+      },
+      { 
+        question: "Which property is used to change the size of the text in CSS?",
+        options: ["font-size", "text-size", "font-style", "font-weight"],
+        correctAnswer: "font-size"
+      },
+      { 
+        question: "What does the visibility property do in CSS?",
+        options: ["Hides an element completely", "Hides an element but keeps the space it occupies", "Makes an element visible", "Both b and c"],
+        correctAnswer: "Both b and c"
+      },
+      { 
+        question: "How do you make a block-level element appear inline in CSS?",
+        options: ["display: block;", "display: flex;", "display: inline;", "display: inline-block;"],
+        correctAnswer: "display: inline;"
+      },
+      { 
+        question: "Which of the following is true about the @media rule in CSS?",
+        options: ["It is used for defining multiple stylesheets", "It allows for defining styles based on different screen sizes", "It is used for creating external links", "It controls the layout of grid elements"],
+        correctAnswer: "It allows for defining styles based on different screen sizes"
+      },
+      { 
+        question: "Which CSS property is used to control the space between letters?",
+        options: ["letter-spacing", "word-spacing", "line-height", "text-spacing"],
+        correctAnswer: "letter-spacing"
+      },
+      { 
+        question: "What does the `flex-grow` property do in CSS?",
+        options: ["Controls the space between flex items", "Controls the order of flex items", "Defines the size of a flex container", "Specifies how much a flex item should grow relative to others"],
+        correctAnswer: "Specifies how much a flex item should grow relative to others"
+      },
+      { 
+        question: "Which property is used to create space between the elements in a CSS grid layout?",
+        options: ["grid-gap", "grid-padding", "gap", "space-between"],
+        correctAnswer: "grid-gap"
+      },
+      { 
+        question: "What does the opacity property do in CSS?",
+        options: ["Makes an element transparent", "Changes the color of an element", "Increases the visibility of an element", "Defines the transparency of an element"],
+        correctAnswer: "Defines the transparency of an element"
+      },
+      { 
+        question: "What is the purpose of the vh and vw units in CSS?",
+        options: ["To define the width and height in pixels", "To represent a percentage of the viewport's width and height", "To define the width and height of an element in centimeters", "To control the space between elements"],
+        correctAnswer: "To represent a percentage of the viewport's width and height"
+      },
+      { 
+        question: "How do you apply styles to a specific ID in CSS?",
+        options: ["#idname {}", ".idname {}", "idname {}", "*idname {}"],
+        correctAnswer: "#idname {}"
+      },
+      { 
+        question: "What does the align-items property do in a flex container?",
+        options: ["Aligns the flex container items along the main axis", "Aligns the flex container items along the cross axis", "Sets the size of the flex container items", "Controls the space between flex items"],
+        correctAnswer: "Aligns the flex container items along the cross axis"
+      },
+      { 
+        question: "How do you add a background image to an element in CSS?",
+        options: ["background: url('image.jpg');", "background-image: 'image.jpg';", "background-image: url('image.jpg');", "background-url: image.jpg;"],
+        correctAnswer: "background-image: url('image.jpg');"
+      },
+      { 
+        question: "What is the @keyframes rule used for in CSS?",
+        options: ["To define animations", "To set media queries", "To define a responsive layout", "To create grid layouts"],
+        correctAnswer: "To define animations"
+      },
+      { 
+        question: "Which CSS property is used to set the font style of text?",
+        options: ["text-style", "font-family", "font-style", "text-font"],
+        correctAnswer: "font-style"
+      },
+      { 
+        question: "Which of the following properties is used to create flexible layouts in CSS?",
+        options: ["display: block;", "display: flex;", "display: grid;", "display: inline;"],
+        correctAnswer: "display: flex;"
+      },
+    ];
+
+    // Function to shuffle array
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    // Shuffle all questions and take first 30
+    const questionData = shuffleArray([...allQuestions]).slice(0, 30);
+    const totalQuestions = questionData.length; // Will always be 30
+    let currentQuestion = 1;
+    let answers = Array(totalQuestions).fill(null);
+    let flagged = new Set();
+
+    const questionsContainer = document.getElementById('questions-container');
+    const summaryButtons = document.getElementById('summary-buttons');
+    const attemptedCount = document.getElementById('attempted-count');
+    const flaggedCount = document.getElementById('flagged-count');
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    document.getElementById('total-questions').textContent = totalQuestions;
+
+    const clickSound = document.getElementById('clickSound');
+    const successSound = document.getElementById('successSound');
+    const warningSound = document.getElementById('warningSound');
+
+    // Get and set username as soon as page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      const storedName = localStorage.getItem('name') || 'Student';
+      document.getElementById('username').textContent = storedName;
+    });
+
+    function createSummaryButtons() {
+      summaryButtons.innerHTML = '';
+      for (let i = 1; i <= totalQuestions; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = String(i).padStart(2, '0');
+        btn.setAttribute('aria-label', `Go to question ${i}`);
+        if (answers[i-1]) {
+          btn.setAttribute('aria-description', 
+            `Question ${i}: ${answers[i-1] ? 'Answered' : 'Not answered'}${flagged.has(i) ? ', Flagged' : ''}`
+          );
+        }
+        btn.addEventListener('click', () => {
+          clickSound.play();
+          saveAnswer(currentQuestion);
+          currentQuestion = i;
+          renderQuestion(currentQuestion);
+        });
+        summaryButtons.appendChild(btn);
+      }
+    }
+
+    function updateSummaryUI() {
+      const attempted = answers.filter(a => a !== null).length;
+      const flaggedCount = flagged.size;
+      const remaining = totalQuestions - attempted;
+      const progressPercentage = (attempted / totalQuestions) * 100;
+
+      // Update the sidebar content
+      document.querySelector('.sidebar').innerHTML = `
+        <div class="summary-header">
+          <h3>Quiz Progress</h3>
+        </div>
+
+        <div class="progress-section">
+          <div class="progress-label">
+            <span>Completion</span>
+            <span class="percentage">${progressPercentage.toFixed(1)}%</span>
+          </div>
+          <div class="progress-container">
+            <div class="progress-bar" style="width: ${progressPercentage}%"></div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value">${attempted}</div>
+            <div class="stat-label">Attempted</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${remaining}</div>
+            <div class="stat-label">Remaining</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${flaggedCount}</div>
+            <div class="stat-label">Flagged</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${totalQuestions}</div>
+            <div class="stat-label">Total</div>
+          </div>
+        </div>
+
+        <div class="questions-summary">
+          <div class="summary-buttons" id="summary-buttons"></div>
+        </div>
+      `;
+
+      // Update summary buttons
+      const summaryButtons = document.getElementById('summary-buttons');
+      summaryButtons.innerHTML = '';
+      for (let i = 0; i < totalQuestions; i++) {
+        const button = document.createElement('button');
+        button.textContent = (i + 1).toString().padStart(2, '0');
+        
+        if (answers[i]) {
+          button.classList.add('answered');
+          const answerIndex = questionData[i].options.indexOf(answers[i]);
+          const answerLetter = String.fromCharCode(65 + answerIndex);
+          button.setAttribute('data-tooltip', `Answer: ${answerLetter}`);
+          button.setAttribute('data-answer', answerLetter);
+        }
+        
+        if (flagged.has(i + 1)) {
+          button.classList.add('flagged');
+        }
+        
+        if (i + 1 === currentQuestion) {
+          button.classList.add('active');
+        }
+        
+        button.addEventListener('click', () => {
+          saveAnswer(currentQuestion);
+          currentQuestion = i + 1;
+          renderQuestion(currentQuestion);
+        });
+        
+        summaryButtons.appendChild(button);
+      }
+    }
+
+    function renderQuestion(n) {
+      const q = questionData[n - 1];
+      questionsContainer.innerHTML = '';
+      setTimeout(() => {
+        questionsContainer.innerHTML = `
+          <div class="question-box" style="animation: slideIn 0.3s ease-out" role="region" aria-label="Question ${n} of ${totalQuestions}">
+            <p class="question-number" role="heading" aria-level="2">Question ${n} of ${totalQuestions}</p>
+            <p>${q.question}</p>
+            <div class="options" role="radiogroup" aria-label="Answer options">
+              ${q.options.map((opt, index) => `
+                <label data-option="${String.fromCharCode(65 + index)}" tabindex="0">
+                  <input type="radio" name="q${n}" value="${opt}" ${answers[n - 1] === opt ? 'checked' : ''}
+                    aria-label="Option ${String.fromCharCode(65 + index)}: ${opt}">
+                  ${opt}
+                </label>`).join('')}
+            </div>
+          </div>
+        `;
+
+        // Add keyboard navigation for options
+        const labels = document.querySelectorAll('.options label');
+        labels.forEach((label, index) => {
+          label.addEventListener('keydown', (e) => {
+            if (e.key === ' ' || e.key === 'Enter') {
+              e.preventDefault();
+              const radio = label.querySelector('input[type="radio"]');
+              radio.checked = true;
+              radio.dispatchEvent(new Event('change'));
+            }
+          });
+        });
+
+        // Highlight current question in summary
+        document.querySelectorAll('.summary-buttons button').forEach(btn => {
+          if (parseInt(btn.textContent) === n) {
+            btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        });
+
+        updateSummaryUI();
+      }, 50); // Small delay for animation to work
+    }
+
+    function saveAnswer(n) {
+      const options = document.querySelectorAll(`input[name="q${n}"]`);
+      for (const opt of options) {
+        if (opt.checked) {
+          answers[n - 1] = opt.value;
+          return;
+        }
+      }
+      answers[n - 1] = null;
+    }
+
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        clickSound.play();
+        saveAnswer(currentQuestion);
+        const label = btn.textContent.trim();
+        if (label.includes('First')) currentQuestion = 1;
+        else if (label.includes('Previous')) currentQuestion = Math.max(1, currentQuestion - 1);
+        else if (label.includes('Next')) currentQuestion = Math.min(totalQuestions, currentQuestion + 1);
+        else if (label.includes('Last')) currentQuestion = totalQuestions;
+        renderQuestion(currentQuestion);
+      });
+    });
+
+    document.querySelector('.flag-btn').addEventListener('click', () => {
+      clickSound.play();
+      if (flagged.has(currentQuestion)) {
+        flagged.delete(currentQuestion);
+      } else {
+        flagged.add(currentQuestion);
+      }
+      updateSummaryUI();
+    });
+
+    document.querySelector('.save-btn').addEventListener('click', () => {
+      successSound.play();
+      saveAnswer(currentQuestion);
+      alert("Answer saved!");
+      updateSummaryUI();
+    });
+
+    const timerInterval = setInterval(() => {
+      if (minutes === 0 && seconds === 0) {
+        warningSound.play();
+        clearInterval(timerInterval);
+        autoSubmitQuiz();
+      } else if (minutes === 5 && seconds === 0) {
+        warningSound.play();
+      } else if (minutes === 1 && seconds === 0) {
+        warningSound.play();
+      }
+      if (seconds === 0) {
+        minutes--;
+        seconds = 59;
+      } else {
+        seconds--;
+      }
+      updateTimerDisplay();
+    }, 1000);
+
+    function autoSubmitQuiz() {
+      alert("Time's up! Your quiz will be submitted automatically.");
+      submitQuiz(true);
+    }
+
+    function submitQuiz(isAutoSubmit = false) {
+      if (!isAutoSubmit) {
+        const unansweredCount = answers.filter(a => a === null).length;
+        const confirmMessage = unansweredCount > 0 ? 
+          `You have ${unansweredCount} unanswered questions. Are you sure you want to submit?` :
+          'Are you sure you want to submit your quiz?';
+          
+        if (!confirm(confirmMessage)) {
+          return;
+        }
+      }
+
+      // Calculate score
+      const totalAnswered = answers.filter(a => a !== null).length;
+      const correctAnswers = answers.reduce((count, answer, index) => {
+        const question = questionData[index];
+        if (answer === question.correctAnswer) {
+          return count + 1;
+        }
+        return count;
+      }, 0);
+      
+      const percentage = (correctAnswers / totalQuestions) * 100;
+      
+      // Save results to localStorage
+      localStorage.setItem('score', correctAnswers);
+      localStorage.setItem('totalQuestions', totalQuestions);
+      localStorage.setItem('percentage', percentage);
+      localStorage.setItem('timeRemaining', minutes * 60 + seconds);
+      
+      // Redirect based on score
+      if (percentage >= 80) {
+        window.location.href = 'certificate.html';
+      } else {
+        window.location.href = 'submit.html';
+      }
+    }
+
+    function showReviewPopup() {
+      const popup = document.createElement('div');
+      popup.className = 'review-popup';
+      
+      const reviewContent = document.createElement('div');
+      reviewContent.className = 'review-content';
+      
+      let answeredCount = answers.filter(a => a !== null).length;
+      let flaggedCount = flagged.size;
+      let remainingCount = totalQuestions - answeredCount;
+      
+      const reviewHTML = `
+        <div class="review-header">
+          <h2>Quiz Summary</h2>
+          <p>Review your answers before submitting</p>
+        </div>
+        
+        <div class="review-stats">
+          <div class="stat-box">
+            <div class="number">${answeredCount}</div>
+            <div class="label">Answered</div>
+          </div>
+          <div class="stat-box">
+            <div class="number">${remainingCount}</div>
+            <div class="label">Remaining</div>
+          </div>
+          <div class="stat-box">
+            <div class="number">${flaggedCount}</div>
+            <div class="label">Flagged</div>
+          </div>
+        </div>
+
+        <div class="review-grid">
+          ${answers.map((answer, index) => `
+            <div class="review-item ${answer ? 'answered' : 'unanswered'} ${flagged.has(index + 1) ? 'flagged' : ''}" 
+                 onclick="currentQuestion = ${index + 1}; renderQuestion(${index + 1}); document.querySelector('.review-popup').remove();">
+              <strong>Q${index + 1}</strong>
+              <br>
+              ${answer 
+                ? `<span style="color: #4CAF50">Answer: ${String.fromCharCode(65 + questionData[index].options.indexOf(answer))}</span>` 
+                : '<span style="color: #f44336">Not answered</span>'}
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="review-actions">
+          <button class="cancel">Review Again</button>
+          <button class="submit">Submit Quiz</button>
+        </div>
+      `;
+      
+      reviewContent.innerHTML = reviewHTML;
+      popup.appendChild(reviewContent);
+      document.body.appendChild(popup);
+      
+      requestAnimationFrame(() => {
+        popup.style.display = 'block';
+      });
+      
+      popup.querySelector('.cancel').addEventListener('click', () => {
+        popup.remove();
+      });
+      
+      popup.querySelector('.submit').addEventListener('click', () => {
+        popup.remove();
+        submitQuiz(false);
+      });
+
+      // Make items clickable to jump to that question
+      document.querySelectorAll('.review-item').forEach((item, index) => {
+        item.style.cursor = 'pointer';
+        item.title = 'Click to review this question';
+      });
+    }
+
+    // Update finish button click handler
+    document.querySelector('.finish-btn').addEventListener('click', showReviewPopup);
+
+    // Add page leave confirmation
+    window.addEventListener('beforeunload', (e) => {
+      if (answers.some(a => a !== null)) {  // Only show warning if user has answered some questions
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
+
+    let minutes = 30, seconds = 0;
+
+    function updateTimerDisplay() {
+      const timerEl = document.getElementById('timer');
+      
+      // Update timer classes based on remaining time
+      timerEl.className = 'timer-circle';
+      if (minutes <= 5) {
+        timerEl.classList.add('warning');
+      }
+      if (minutes <= 1) {
+        timerEl.classList.add('critical');
+      }
+      
+      timerEl.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    document.addEventListener('change', (e) => {
+      if (e.target.type === 'radio') {
+        clickSound.play();
+        e.target.closest('label').classList.add('selected');
+        const otherLabels = e.target.closest('.options').querySelectorAll('label');
+        otherLabels.forEach(label => {
+          if (label !== e.target.closest('label')) {
+            label.classList.remove('selected');
+          }
+        });
+      }
+    });
+
+    // Add keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      // Only handle keyboard shortcuts if not typing in an input
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        return;
+      }
+
+      switch(e.key) {
+        case 'ArrowLeft':
+        case 'p':
+        case 'P':
+          // Previous question
+          saveAnswer(currentQuestion);
+          currentQuestion = Math.max(1, currentQuestion - 1);
+          renderQuestion(currentQuestion);
+          clickSound.play();
+          break;
+
+        case 'ArrowRight':
+        case 'n':
+        case 'N':
+          // Next question
+          saveAnswer(currentQuestion);
+          currentQuestion = Math.min(totalQuestions, currentQuestion + 1);
+          renderQuestion(currentQuestion);
+          clickSound.play();
+          break;
+
+        case 'f':
+        case 'F':
+          // Flag question
+          if (flagged.has(currentQuestion)) {
+            flagged.delete(currentQuestion);
+          } else {
+            flagged.add(currentQuestion);
+          }
+          clickSound.play();
+          updateSummaryUI();
+          break;
+
+        case 's':
+        case 'S':
+          // Save answer
+          saveAnswer(currentQuestion);
+          successSound.play();
+          updateSummaryUI();
+          break;
+
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+          // Quick answer selection (A=1, B=2, C=3, D=4)
+          const optionIndex = parseInt(e.key) - 1;
+          const radioButtons = document.querySelectorAll(`input[name="q${currentQuestion}"]`);
+          if (radioButtons[optionIndex]) {
+            radioButtons[optionIndex].checked = true;
+            radioButtons[optionIndex].closest('label').classList.add('selected');
+            clickSound.play();
+            
+            // Remove selected class from other options
+            radioButtons.forEach((radio, idx) => {
+              if (idx !== optionIndex) {
+                radio.closest('label').classList.remove('selected');
+              }
+            });
+            
+            // Auto-save the answer
+            saveAnswer(currentQuestion);
+            updateSummaryUI();
+          }
+          break;
+      }
+    });
+
+    // Help tooltip for keyboard shortcuts
+    const helpTooltip = document.createElement('div');
+    helpTooltip.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-size: 12px;
+      z-index: 1000;
+      display: none;
+    `;
+    helpTooltip.innerHTML = `
+      Keyboard Shortcuts:<br>
+      ←/P: Previous Question<br>
+      →/N: Next Question<br>
+      F: Flag Question<br>
+      S: Save Answer<br>
+      1-4: Select Answer A-D<br>
+      Press ? to toggle this help
+    `;
+    document.body.appendChild(helpTooltip);
+
+    // Toggle help tooltip with ? key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '?' || e.key === '/') {
+        helpTooltip.style.display = helpTooltip.style.display === 'none' ? 'block' : 'none';
+      }
+    });
+
+    updateTimerDisplay();
+    createSummaryButtons();
+    renderQuestion(currentQuestion);
+
+  </script>
+</body>
+</html>

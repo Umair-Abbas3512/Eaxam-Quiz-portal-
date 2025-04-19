@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate of Achievement</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 40px;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .certificate {
+            background: white;
+            padding: 50px;
+            border: 20px solid #4CAF50;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            margin: auto;
+        }
+
+        .certificate:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+CiAgPHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSIjZmZmZmZmIi8+CiAgPGNpcmNsZSBjeD0iMTAiIGN5PSIxMCIgcj0iMiIgZmlsbD0iI2YwZjBmMCIvPgo8L3N2Zz4=');
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .certificate h1 {
+            color: #4CAF50;
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: normal;
+        }
+
+        .certificate h2 {
+            color: #333;
+            font-size: 24px;
+            margin: 20px 0;
+        }
+
+        .recipient {
+            font-size: 36px;
+            color: #333;
+            margin: 30px 0;
+        }
+
+        .score {
+            font-size: 24px;
+            color: #4CAF50;
+            margin: 20px 0;
+        }
+
+        .description {
+            font-size: 18px;
+            color: #666;
+            line-height: 1.6;
+            margin: 30px 0;
+        }
+
+        .date {
+            font-size: 18px;
+            color: #666;
+            margin: 20px 0;
+        }
+
+        .signature {
+            margin-top: 50px;
+            border-top: 2px solid #4CAF50;
+            padding-top: 20px;
+            font-style: italic;
+            color: #333;
+        }
+
+        .signature img {
+            width: 500px;  /* Set a fixed width */
+            height: auto;  /* Maintain aspect ratio */
+            margin: 20px 0;  /* Add some vertical spacing */
+            object-fit: contain;  /* Ensure the image fits within its container */
+        }
+
+        .actions {
+            margin-top: 40px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+            }
+            .actions {
+                display: none;
+            }
+            .certificate {
+                border: none;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="certificate">
+        <div class="content">
+            <h1>Certificate of Achievement</h1>
+            <p class="recipient" id="recipientName">Loading...</p>
+            <h2>has successfully completed the</h2>
+            <h2>Online Quiz Assessment</h2>
+            <p class="score" id="scoreDisplay">Score: Loading...</p>
+            <p class="description">
+                This certificate is awarded in recognition of the recipient's excellent performance 
+                in our comprehensive online assessment, demonstrating strong knowledge and understanding 
+                of the subject matter.
+            </p>
+            <p class="date" id="certDate">Loading...</p>
+            <div class="signature">
+                <img src="./inam.png" alt="">
+                <p>Dr. Inam Ullah Khan</p>
+                <p>Quiz Administrator</p>
+            </div>
+            <div class="actions">
+                <a href="#" onclick="window.print()" class="button">Print Certificate</a>
+                <a href="Home.html" class="button">Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get data from localStorage
+        const name = localStorage.getItem('name') || 'Student';
+        const score = localStorage.getItem('score') || '0';
+        const totalQuestions = localStorage.getItem('totalQuestions') || '30';
+        const percentage = localStorage.getItem('percentage') || '0';
+
+        // Format date
+        const today = new Date();
+        const dateStr = today.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+
+        // Update certificate
+        document.getElementById('recipientName').textContent = name;
+        document.getElementById('scoreDisplay').textContent = 
+            `Score: ${score}/${totalQuestions} (${parseFloat(percentage).toFixed(1)}%)`;
+        document.getElementById('certDate').textContent = `Awarded on ${dateStr}`;
+    </script>
+</body>
+</html>
+
+

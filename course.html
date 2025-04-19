@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses - Online Quiz Competition</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+        }
+
+        .navbar ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .navbar ul li {
+            margin: 0 15px;
+        }
+
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            display: block;
+            transition: background-color 0.3s;
+        }
+
+        .navbar ul li a:hover {
+            background-color: #575757;
+        }
+
+        .container {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .courses {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .course-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 300px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            margin-top: 2px;
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .course-card h3 {
+            margin-top: 0;
+        }
+
+        .course-card p {
+            margin: 10px 0;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .course-card .start-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .course-card .start-button:hover {
+            background-color: #45a049;
+        }
+
+        footer {
+            margin-top: 11%;
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            
+        }
+
+        @media (max-width: 768px) {
+            .course-card {
+                width: 100%;
+                max-width: 400px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .navbar ul li {
+                margin: 10px 0;
+            }
+
+            .course-card {
+                width: 90%;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Courses - Online Quiz Competition</h1>
+    </header>
+    <nav class="navbar">
+        <ul>
+            <li><a href="Home.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="course.html">Courses</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h2>Available Courses</h2>
+        <div class="courses">
+            <div class="course-card">
+                <h3>Web Development</h3>
+                <p>Learn the basics of HTML, CSS, and JavaScript to build interactive websites.</p>
+                <button class="start-button" onclick="startQuiz('Web Development', 'welcome.html')">Start Quiz</button>
+            </div>
+            <div class="course-card">
+                <h3>Artificial Intelligence</h3>
+                <p>Explore the fundamentals of AI and machine learning concepts.</p>
+                <button class="start-button" onclick="startQuiz('Artificial Intelligence', 'welcome.html')">Start Quiz</button>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2025 Online Quiz Competition. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        /**
+         * Save the selected course and navigate to the quiz page.
+         * @param {string} courseName - The name of the course.
+         * @param {string} quizPage - The URL of the quiz page.
+         */
+        function startQuiz(courseName, quizPage) {
+            // Store the course name in localStorage for later reference
+            localStorage.setItem('selectedCourse', courseName);
+            // Redirect to the quiz page
+            window.location.href = quizPage;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Results</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(to right, #4CAF50, #45a049);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .results-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .score-overview {
+            text-align: center;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(145deg, #ffffff, #f5f5f5);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .score-circle {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            background: conic-gradient(#4CAF50 var(--progress), #f0f0f0 var(--progress));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .score-circle::after {
+            content: '';
+            position: absolute;
+            width: 190px;
+            height: 190px;
+            border-radius: 50%;
+            border: 5px solid transparent;
+            border-top-color: rgba(76, 175, 80, 0.5);
+            animation: rotateProgress 2s linear infinite;
+        }
+
+        @keyframes rotateProgress {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .score-value {
+            position: relative;
+            font-size: 3rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .score-label {
+            font-size: 1.2rem;
+            color: #666;
+            margin-top: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #4CAF50;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .feedback-section {
+            padding: 2rem;
+            margin: 2rem 0;
+            background: #fff3e0;
+            border-radius: 12px;
+            border-left: 5px solid #ff9800;
+        }
+
+        .feedback-section h3 {
+            color: #f57c00;
+            margin-top: 0;
+        }
+
+        .feedback-section p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .feedback-section ul {
+            margin-top: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .feedback-section li {
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .button {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .retry-btn {
+            background: linear-gradient(to right, #4CAF50, #45a049);
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .certificate-btn {
+            background: linear-gradient(to right, #ffd700, #ffa000);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .home-btn {
+            background: linear-gradient(to right, #757575, #616161);
+            color: white;
+            box-shadow: 0 4px 15px rgba(117, 117, 117, 0.3);
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #f0f0f0;
+            position: absolute;
+            left: 50%;
+            top: -10px;
+            z-index: 1;
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .results-container {
+                margin: 20px;
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .score-circle {
+                width: 150px;
+                height: 150px;
+            }
+
+            .score-circle::before {
+                width: 130px;
+                height: 130px;
+            }
+
+            .score-value {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Quiz Results</h1>
+    </header>
+
+    <div class="results-container">
+        <div class="score-overview">
+            <div class="score-circle" id="score-circle">
+                <div class="score-value">0%</div>
+            </div>
+            <div class="score-label">Your Score</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="correct-answers">0</div>
+                <div class="stat-label">Correct Answers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="total-questions">0</div>
+                <div class="stat-label">Total Questions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="time-spent">0</div>
+                <div class="stat-label">Minutes Spent</div>
+            </div>
+        </div>
+
+        <div class="feedback-section">
+            <h3>Room for Improvement</h3>
+            <p>Thank you for completing the quiz! While you didn't qualify for a certificate this time (minimum 80% required), 
+               this is a great opportunity to review and strengthen your knowledge.</p>
+            <ul>
+                <li>Take time to review the topics you found challenging</li>
+                <li>Practice with similar questions to build your confidence</li>
+                <li>Consider taking notes on areas where you need more focus</li>
+                <li>Try the quiz again when you feel ready</li>
+            </ul>
+        </div>
+
+        <div class="action-buttons">
+            <a href="quiz.html" class="button retry-btn">Try Again</a>
+        
+                <a href="certificate.html" class="button certificate-btn">View Certificate</a>
+            
+        </div>
+    </div>
+
+    <script>
+        // Get score data from localStorage
+        const score = parseInt(localStorage.getItem('score')) || 0;
+        const totalQuestions = parseInt(localStorage.getItem('totalQuestions')) || 30;
+        const percentage = parseFloat(localStorage.getItem('percentage')) || 0;
+
+        // Update the score circle with animation
+        const scoreCircle = document.getElementById('score-circle');
+        scoreCircle.style.setProperty('--progress', `${percentage}%`);
+        
+        // Animate the percentage number
+        const scoreValue = document.querySelector('.score-value');
+        let currentScore = 0;
+        const animationDuration = 1500; // 1.5 seconds
+        const frameRate = 60;
+        const totalFrames = animationDuration / (1000 / frameRate);
+        const scoreIncrement = percentage / totalFrames;
+
+        function animateScore() {
+            if (currentScore < percentage) {
+                currentScore += scoreIncrement;
+                if (currentScore > percentage) currentScore = percentage;
+                scoreValue.textContent = `${Math.round(currentScore)}%`;
+                requestAnimationFrame(animateScore);
+            }
+        }
+
+        // Start the animation after a short delay
+        setTimeout(animateScore, 300);
+
+        // Update stats
+        document.getElementById('correct-answers').textContent = score;
+        document.getElementById('total-questions').textContent = totalQuestions;
+        
+        // Calculate and display time spent (assuming 30 minutes was the total time)
+        const timeSpent = 30 - Math.floor(parseInt(localStorage.getItem('timeRemaining') || '0') / 60);
+        document.getElementById('time-spent').textContent = timeSpent;
+
+        // Update the feedback section with dynamic content based on score
+        const feedbackSection = document.querySelector('.feedback-section');
+        const username = localStorage.getItem('name') || 'Student';
+        const scorePercentage = percentage;
+
+        let feedbackTitle, feedbackMessage, feedbackColor;
+        if (scorePercentage >= 60) {
+            feedbackTitle = "Almost There!";
+            feedbackMessage = `Great effort, ${username}! You're very close to achieving the certificate. With a little more practice, you'll definitely succeed next time.`;
+            feedbackColor = "#4CAF50";
+        } else if (scorePercentage >= 40) {
+            feedbackTitle = "Keep Going!";
+            feedbackMessage = `Good try, ${username}! You've shown understanding of some key concepts. Focus on the areas where you had difficulty.`;
+            feedbackColor = "#ff9800";
+        } else {
+            feedbackTitle = "Room for Improvement";
+            feedbackMessage = `Thank you for taking the quiz, ${username}. Don't get discouraged - this is a great opportunity to identify areas where you need more practice.`;
+            feedbackColor = "#f44336";
+        }
+
+        feedbackSection.innerHTML = `
+            <h3 style="color: ${feedbackColor}">${feedbackTitle}</h3>
+            <p>${feedbackMessage}</p>
+            <ul>
+                <li>Review the questions you found challenging</li>
+                <li>Take advantage of our study materials and practice exercises</li>
+                <li>Consider making notes on topics that need more focus</li>
+                <li>Try the quiz again when you feel ready - you can do this!</li>
+            </ul>
+            ${scorePercentage >= 60 ? `
+            <div style="margin-top: 20px; padding: 15px; background: #e8f5e9; border-radius: 8px; border-left: 4px solid #4CAF50">
+                <strong style="color: #4CAF50">💡 Pro Tip:</strong> You're very close to the 80% needed for certification. 
+                Focus on reviewing the specific topics where you missed questions, and you'll likely succeed on your next attempt!
+            </div>
+            ` : ''}
+        `;
+
+        // Confetti animation for high scores
+        function createConfetti() {
+            const colors = ['#4CAF50', '#ff9800', '#2196F3', '#e91e63', '#9c27b0'];
+            const confettiCount = 100;
+
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetti.style.opacity = Math.random();
+                confetti.style.transform = `scale(${Math.random()})`;
+                confetti.style.animation = 'confetti-fall ' + (Math.random() * 3 + 2) + 's linear infinite';
+                
+                document.body.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        // Show confetti for scores above 60%
+        if (percentage >= 60) {
+            setTimeout(createConfetti, 500);
+        }
+
+        // Add radial progress animation
+        const circle = document.querySelector('.score-circle');
+        circle.style.transform = 'scale(0.8)';
+        setTimeout(() => {
+            circle.style.transform = 'scale(1)';
+            circle.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        }, 100);
+    </script>
+</body>
+</html>
+
+
+
+
+
+

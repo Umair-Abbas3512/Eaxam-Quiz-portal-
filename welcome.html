@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Online Quiz</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .welcome-container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+            font-size: 1.1em;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .rules {
+            text-align: left;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        .rules h2 {
+            color: #333;
+            margin-top: 0;
+        }
+
+        .rules ul {
+            padding-left: 20px;
+            color: #666;
+        }
+
+        .rules li {
+            margin-bottom: 10px;
+        }
+
+        .start-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .start-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .start-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Online Quiz</h1>
+    </header>
+
+    <div class="welcome-container">
+        <div class="input-group">
+            <label for="userName">Enter Your Name</label>
+            <input type="text" id="userName" placeholder="Your full name" required>
+            <div id="nameError" class="error-message">Please enter your name to continue.</div>
+        </div>
+
+        <div class="rules">
+            <h2>Quiz Rules</h2>
+            <ul>
+                <li>The quiz consists of 30 multiple-choice questions</li>
+                <li>You have 30 minutes to complete the quiz</li>
+                <li>Each question has one correct answer</li>
+                <li>You can flag questions to review later</li>
+                <li>A score of 80% or higher is required to receive a certificate</li>
+                <li>You can't go back to previous questions once submitted</li>
+            </ul>
+        </div>
+
+        <button class="start-btn" onclick="startQuiz()">Start Quiz</button>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Online Quiz Competition. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        function startQuiz() {
+            const userName = document.getElementById('userName').value.trim();
+            const errorElement = document.getElementById('nameError');
+            
+            if (!userName) {
+                errorElement.style.display = 'block';
+                return;
+            }
+
+            // Save name to localStorage
+            localStorage.setItem('name', userName);
+            
+            // Clear any existing quiz data
+            localStorage.removeItem('score');
+            localStorage.removeItem('answers');
+            localStorage.removeItem('flagged');
+            
+            // Redirect to quiz
+            window.location.href = 'quiz.html';
+        }
+
+        // Live validation
+        document.getElementById('userName').addEventListener('input', function() {
+            const errorElement = document.getElementById('nameError');
+            if (this.value.trim()) {
+                errorElement.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
